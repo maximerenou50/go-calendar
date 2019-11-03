@@ -8,6 +8,7 @@ docker build -t go-calendar .
 docker tag go-calendar:latest maximerenou50/go-calendar:0.1.0
 docker push maximerenou50/go-calendar:0.1.0
 ```
+Image can be found [here](https://hub.docker.com/r/maximerenou50/go-calendar/dockerfile)
 
 ## Run
 ```
