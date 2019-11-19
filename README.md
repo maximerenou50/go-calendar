@@ -1,18 +1,19 @@
 # Go calendar
 This is a simple go web application that display the current month, like a calendar would. This application has been written in the context of a technical challenge.
 It display the current month for any GET requests and return a 501 otherwise.
+Open metrics are exposed to the port 1081.
 
 ## Build
 ```
 docker build -t go-calendar .
-docker tag go-calendar:latest maximerenou50/go-calendar:0.1.0
-docker push maximerenou50/go-calendar:0.1.0
+docker tag go-calendar:latest maximerenou50/go-calendar:0.2.1
+docker push maximerenou50/go-calendar:0.2.1
 ```
 Image can be found [here](https://hub.docker.com/r/maximerenou50/go-calendar/dockerfile)
 
 ## Run
 ```
-docker run -p 1080:1080 maximerenou50/go-calendar:0.1.0
+docker run -p 1080:1080 -p 1081:1081 maximerenou50/go-calendar:0.2.1
 ```
 
 ## Test

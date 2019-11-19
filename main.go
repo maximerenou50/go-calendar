@@ -11,13 +11,17 @@ import (
 
 func main() {
 	fmt.Println("Starting web server...")
-	http.HandleFunc("/", handler)
-    http.Handle("/metrics", promhttp.Handler())
-    http.ListenAndServe(":1080", nil)
+    go func() {
+		http.ListenAndServe(":1080", &calendarHandler{})
+	}()
+	http.ListenAndServe(":1081", promhttp.Handler())
+}
+
+type calendarHandler struct {
 }
 
 // Show calendar on GET and 501 error on any other requests
-func handler(w http.ResponseWriter, req *http.Request) {
+func (m *calendarHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
     case "GET":
         recordMetrics()
