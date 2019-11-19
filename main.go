@@ -4,18 +4,23 @@ import (
 	"fmt"
 	"time"
 	"net/http"
+    "github.com/prometheus/client_golang/prometheus"
+    "github.com/prometheus/client_golang/prometheus/promauto"
+    "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
 	fmt.Println("Starting web server...")
 	http.HandleFunc("/", handler)
+    http.Handle("/metrics", promhttp.Handler())
     http.ListenAndServe(":1080", nil)
 }
 
 // Show calendar on GET and 501 error on any other requests
 func handler(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
-    case "GET":     
+    case "GET":
+        recordMetrics()
         calendar(w)
     default:
     	http.Error(w, "501 Not Implemented", http.StatusNotImplemented)
@@ -43,3 +48,15 @@ func calendar(w http.ResponseWriter) {
 		}
 	}
 }
+
+// Increment the go_calendar_processed_ops_total metrics
+func recordMetrics() {
+    opsProcessed.Inc()
+}
+
+var (
+    opsProcessed = promauto.NewCounter(prometheus.CounterOpts{
+        Name: "go_calendar_processed_ops_total",
+        Help: "The total number of processed events",
+    })
+)
